@@ -1,0 +1,111 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+            <i class="fas fa-balance-scale me-2"></i>
+            <span class="fw-bold">Legal Consultation</span>
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">
+                        <i class="fas fa-home me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('chat') }}">
+                        <i class="fas fa-comments me-1"></i>Consultation
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#statusModal">
+                        <i class="fas fa-info-circle me-1"></i>System Status
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#disclaimerModal">
+                        <i class="fas fa-exclamation-triangle me-1"></i>Legal Notice
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- System Status Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-server me-2"></i>System Status
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="systemStatus">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="loadSystemStatus()">
+                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Legal Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Important Legal Disclaimer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading">
+                        <i class="fas fa-info-circle me-2"></i>Information Only - Not Legal Advice
+                    </h6>
+                    <p class="mb-0">This AI system provides general legal information for educational purposes only and does not constitute legal advice.</p>
+                </div>
+                
+                <h6>Important Points:</h6>
+                <ul>
+                    <li><strong>No Attorney-Client Relationship:</strong> Using this system does not create an attorney-client relationship</li>
+                    <li><strong>Consult Professionals:</strong> Always consult qualified legal professionals for specific legal matters</li>
+                    <li><strong>Accuracy Limitations:</strong> AI-generated responses may contain errors or be incomplete</li>
+                    <li><strong>Jurisdiction Specific:</strong> Laws vary by jurisdiction and change over time</li>
+                    <li><strong>User Responsibility:</strong> Users are responsible for verifying all legal information independently</li>
+                </ul>
+                
+                <div class="alert alert-info">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        Last Updated: August 26, 2025 | 
+                        <i class="fas fa-user me-1"></i>
+                        Developed by cicada007o
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <i class="fas fa-check me-1"></i>I Understand
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

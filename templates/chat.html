@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Legal Consultation Chat - AI Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <!-- Chat Sidebar -->
+            <div class="col-md-3 chat-sidebar">
+                <div class="sidebar-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-balance-scale me-2"></i>Legal Consultation
+                    </h5>
+                    <small class="text-muted">AI-Powered Assistant</small>
+                </div>
+                
+                <!-- Session Info -->
+                <div class="session-info">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <i class="fas fa-user-circle me-2"></i>Current Session
+                            </h6>
+                            <p class="card-text small" id="sessionInfo">
+                                <span class="badge bg-secondary">Starting...</span>
+                            </p>
+                            <button class="btn btn-outline-primary btn-sm" onclick="resetSession()">
+                                <i class="fas fa-refresh me-1"></i>New Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h6 class="sidebar-section-title">Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="loadExampleQuery('definitions')">
+                            <i class="fas fa-book me-1"></i>Legal Definitions
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="loadExampleQuery('procedures')">
+                            <i class="fas fa-list-ol me-1"></i>Legal Procedures
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="loadExampleQuery('penalties')">
+                            <i class="fas fa-gavel me-1"></i>Penalties & Punishments
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="loadExampleQuery('sections')">
+                            <i class="fas fa-section me-1"></i>BNS Sections
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- System Status Mini -->
+                <div class="system-status-mini">
+                    <h6 class="sidebar-section-title">System Status</h6>
+                    <div id="miniSystemStatus">
+                        <div class="status-indicator">
+                            <span class="status-dot bg-secondary"></span>
+                            <small>Initializing...</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Legal Disclaimer -->
+                <div class="legal-disclaimer">
+                    <div class="alert alert-warning alert-sm">
+                        <small>
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            <strong>Disclaimer:</strong> This AI provides legal information only, not legal advice. 
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#disclaimerModal" class="alert-link">Read more</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Chat Area -->
+            <div class="col-md-9 chat-main">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0">
+                                <i class="fas fa-robot text-primary me-2"></i>Legal AI Assistant
+                            </h4>
+                            <small class="text-muted">Ask any question about BNS legal documents</small>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="btn btn-outline-secondary btn-sm me-2" onclick="exportChat()">
+                                <i class="fas fa-download me-1"></i>Export
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="clearChat()">
+                                <i class="fas fa-trash me-1"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Messages Area -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Welcome Message -->
+                    <div class="message-container assistant-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>Legal AI Assistant</strong>
+                                <span class="message-time">Now</span>
+                            </div>
+                            <div class="message-body">
+                                <p>👋 Welcome to the Legal Consultation System!</p>
+                                <p>I'm your AI-powered legal assistant, specialized in BNS (Bharatiya Nyaya Sanhita) legal documents. I can help you with:</p>
+                                <ul>
+                                    <li><strong>Legal Definitions:</strong> Understand legal terms and concepts</li>
+                                    <li><strong>Procedures:</strong> Learn about legal processes and requirements</li>
+                                    <li><strong>Penalties:</strong> Discover punishments for various offenses</li>
+                                    <li><strong>Citations:</strong> Find specific sections and provisions</li>
+                                </ul>
+                                <div class="alert alert-info mt-3">
+                                    <small>
+                                        <i class="fas fa-lightbulb me-1"></i>
+                                        <strong>Tip:</strong> Ask specific questions for better results. For example: "What is the definition of theft under BNS?" or "What is the punishment for murder?"
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <div class="message-container assistant-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="typing-animation">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <small class="text-muted">AI is analyzing legal documents...</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Input Area -->
+                <div class="chat-input-area">
+                    <form id="chatForm" onsubmit="sendMessage(event)">
+                        <div class="input-group">
+                            <textarea 
+                                class="form-control chat-input" 
+                                id="messageInput" 
+                                placeholder="Ask your legal question here... (e.g., What is the definition of theft under BNS?)"
+                                rows="1"
+                                maxlength="1000"
+                            ></textarea>
+                            <button class="btn btn-primary" type="submit" id="sendButton">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="input-footer">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <span id="charCount">0</span>/1000 characters
+                                </small>
+                                <small class="text-muted">
+                                    Press Ctrl+Enter to send
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Response Details Modal -->
+<div class="modal fade" id="responseDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-info-circle me-2"></i>Response Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="responseDetailsContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+<script>
+// Initialize chat when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeChat();
+    
+    // Handle pre-filled query from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const preQuery = urlParams.get('q');
+    if (preQuery) {
+        document.getElementById('messageInput').value = decodeURIComponent(preQuery);
+        // Auto-focus on the input
+        document.getElementById('messageInput').focus();
+    }
+    
+    // Auto-resize textarea
+    const messageInput = document.getElementById('messageInput');
+    messageInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        
+        // Update character count
+        const charCount = this.value.length;
+        document.getElementById('charCount').textContent = charCount;
+        
+        // Change color based on limit
+        const charCountElement = document.getElementById('charCount');
+        if (charCount > 900) {
+            charCountElement.className = 'text-danger';
+        } else if (charCount > 700) {
+            charCountElement.className = 'text-warning';
+        } else {
+            charCountElement.className = 'text-muted';
+        }
+    });
+    
+    // Handle Ctrl+Enter to send
+    messageInput.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage(e);
+        }
+    });
+});
+</script>
+{% endblock %}

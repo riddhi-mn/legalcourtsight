@@ -1,0 +1,25 @@
+# Environment
+.env
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Data
+data/vector_store/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+node_modules/
+
+# Flask
+instance/

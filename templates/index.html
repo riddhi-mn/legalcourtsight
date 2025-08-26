@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block title %}Legal Consultation RAG System - AI-Powered Legal Assistant{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold text-white mb-4">
+                        Professional Legal Consultation
+                        <span class="text-warning">with AI</span>
+                    </h1>
+                    <p class="lead text-white-50 mb-4">
+                        Advanced RAG-powered system for instant consultation on BNS legal documents. 
+                        Get accurate, AI-generated legal information with proper citations and confidence scoring.
+                    </p>
+                    
+                    <div class="hero-features mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="fas fa-brain text-warning me-2"></i>
+                                    <span class="text-white">AI-Powered Responses</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="fas fa-search text-warning me-2"></i>
+                                    <span class="text-white">Semantic Search</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="fas fa-quote-right text-warning me-2"></i>
+                                    <span class="text-white">Source Citations</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="fas fa-shield-alt text-warning me-2"></i>
+                                    <span class="text-white">Privacy Protected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-actions">
+                        <a href="{{ url_for('chat') }}" class="btn btn-warning btn-lg me-3">
+                            <i class="fas fa-comments me-2"></i>Start Consultation
+                        </a>
+                        <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#featuresModal">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <div class="legal-illustration">
+                        <i class="fas fa-balance-scale hero-icon"></i>
+                        <div class="tech-badges mt-4">
+                            <span class="badge bg-primary me-2 mb-2">
+                                <i class="fab fa-python me-1"></i>Python 3.10
+                            </span>
+                            <span class="badge bg-success me-2 mb-2">
+                                <i class="fas fa-robot me-1"></i>LangChain
+                            </span>
+                            <span class="badge bg-info me-2 mb-2">
+                                <i class="fas fa-brain me-1"></i>OpenAI GPT
+                            </span>
+                            <span class="badge bg-warning text-dark me-2 mb-2">
+                                <i class="fas fa-database me-1"></i>ChromaDB
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- System Status Section -->
+<section class="status-section py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-4">
+                    <i class="fas fa-server text-primary me-2"></i>System Status
+                </h2>
+                <div id="systemStatusCards" class="row g-3">
+                    <!-- Default status cards (will be updated by JS) -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-robot fa-2x text-primary mb-2"></i>
+                                <h6 class="card-title">RAG Engine</h6>
+                                <span class="badge bg-secondary">Initializing...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-database fa-2x text-success mb-2"></i>
+                                <h6 class="card-title">Vector Store</h6>
+                                <span class="badge bg-secondary">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-brain fa-2x text-info mb-2"></i>
+                                <h6 class="card-title">AI Model</h6>
+                                <span class="badge bg-secondary">Connecting...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Example Queries Section -->
+<section class="examples-section py-5">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-4">
+                    <i class="fas fa-question-circle text-primary me-2"></i>Example Legal Queries
+                </h2>
+                <p class="text-muted">
+                    Try these sample questions to see how our AI legal assistant can help you understand BNS provisions
+                </p>
+            </div>
+        </div>
+        
+        <div id="exampleQueries" class="row g-4">
+            <!-- Default example queries (will be enhanced by JS) -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 example-card">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">
+                            <i class="fas fa-book me-2"></i>Definitions
+                        </h6>
+                        <p class="card-text small">
+                            "What is the definition of theft under BNS?"
+                        </p>
+                        <a href="{{ url_for('chat') }}?q=What+is+the+definition+of+theft+under+BNS" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i>Try This
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 example-card">
+                    <div class="card-body">
+                        <h6 class="card-title text-success">
+                            <i class="fas fa-list-ol me-2"></i>Procedures
+                        </h6>
+                        <p class="card-text small">
+                            "What is the procedure for filing an FIR?"
+                        </p>
+                        <a href="{{ url_for('chat') }}?q=What+is+the+procedure+for+filing+an+FIR" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i>Try This
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 example-card">
+                    <div class="card-body">
+                        <h6 class="card-title text-warning">
+                            <i class="fas fa-gavel me-2"></i>Penalties
+                        </h6>
+                        <p class="card-text small">
+                            "What is the punishment for murder under BNS?"
+                        </p>
+                        <a href="{{ url_for('chat') }}?q=What+is+the+punishment+for+murder+under+BNS" class="btn btn-outline-warning btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i>Try This
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 example-card">
+                    <div class="card-body">
+                        <h6 class="card-title text-info">
+                            <i class="fas fa-section me-2"></i>Legal Provisions
+                        </h6>
+                        <p class="card-text small">
+                            "What does Section 103 of BNS say?"
+                        </p>
+                        <a href="{{ url_for('chat') }}?q=What+does+Section+103+of+BNS+say" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i>Try This
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="{{ url_for('chat') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-comments me-2"></i>Start Your Legal Consultation
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Modal -->
+<div class="modal fade" id="featuresModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-cogs me-2"></i>System Features & Architecture
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">
+                            <i class="fas fa-brain me-2"></i>Advanced RAG Pipeline
+                        </h6>
+                        <ul class="list-unstyled text-muted">
+                            <li>• Semantic document retrieval</li>
+                            <li>• Hybrid search capabilities</li>
+                            <li>• OpenAI GPT-3.5 integration</li>
+                            <li>• Confidence scoring system</li>
+                            <li>• Legal-specific prompts</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success">
+                            <i class="fas fa-database me-2"></i>Vector Database
+                        </h6>
+                        <ul class="list-unstyled text-muted">
+                            <li>• ChromaDB vector store</li>
+                            <li>• Persistent embeddings</li>
+                            <li>• Efficient similarity search</li>
+                            <li>• Intelligent document chunking</li>
+                            <li>• Rich metadata enrichment</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-warning">
+                            <i class="fas fa-user-friends me-2"></i>Session Management
+                        </h6>
+                        <ul class="list-unstyled text-muted">
+                            <li>• UUID-based sessions</li>
+                            <li>• Conversation history tracking</li>
+                            <li>• Query analytics & statistics</li>
+                            <li>• Browser persistence</li>
+                            <li>• Real-time status updates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-info">
+                            <i class="fas fa-shield-alt me-2"></i>Security & Privacy
+                        </h6>
+                        <ul class="list-unstyled text-muted">
+                            <li>• Local document processing</li>
+                            <li>• No permanent data storage</li>
+                            <li>• Input sanitization</li>
+                            <li>• Professional disclaimers</li>
+                            <li>• Educational use focused</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-graduation-cap me-2"></i>University Project
+                            </h6>
+                            <p class="mb-2">
+                                This system demonstrates advanced AI/ML concepts including Retrieval-Augmented Generation (RAG), 
+                                vector databases, semantic search, and modern web development practices.
+                            </p>
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>Developed by: <strong>cicada007o</strong> | 
+                                <i class="fas fa-calendar-alt me-1"></i>August 2025 | 
+                                <i class="fas fa-code me-1"></i>Python 3.10 + Flask
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{ url_for('chat') }}" class="btn btn-primary">
+                    <i class="fas fa-comments me-1"></i>Start Consultation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Initialize page when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if JavaScript functions exist before calling them
+    if (typeof loadSystemStatus === 'function') {
+        loadSystemStatus();
+    }
+    if (typeof loadExampleQueries === 'function') {
+        loadExampleQueries();
+    }
+    
+    // Update timestamp in footer
+    updateCurrentTime();
+});
+
+// Update current time display
+function updateCurrentTime() {
+    const now = new Date();
+    const timeString = now.toUTCString();
+    console.log('Page loaded at:', timeString);
+}
+
+// Auto-refresh status every 30 seconds (only if function exists)
+setInterval(function() {
+    if (typeof loadSystemStatus === 'function') {
+        loadSystemStatus();
+    }
+}, 30000);
+</script>
+{% endblock %}
