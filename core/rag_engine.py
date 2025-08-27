@@ -81,7 +81,7 @@ Answer:"""
         try:
             self.qa_chain = ConversationalRetrievalChain.from_llm(
                 llm=self.llm,
-                retriever=self.vector_store_manager.vector_store.as_retriever( search_kwargs={"k": 5} ),
+                retriever=self.vector_store_manager.get_vector_store().as_retriever( search_kwargs={"k": 5} ),
                 memory=self.memory,
                 return_source_documents=True,
                 verbose=True

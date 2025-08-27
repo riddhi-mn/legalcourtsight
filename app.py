@@ -1,11 +1,17 @@
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 import logging
 
 from config import Config
-from core import RAGEngine, DocumentProcessor, VectorStoreManager, SessionManager
+from core.rag_engine import RAGEngine
+from core.document_processor import DocumentProcessor 
+from core.vector_store import VectorStoreManager
+from core.session_manager import  SessionManager
 from api.routes import api_bp
 
 # Load environment variables

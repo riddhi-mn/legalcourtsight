@@ -144,6 +144,10 @@ class VectorStoreManager:
         """Check if vector store is properly initialized"""
         return self.vector_store is not None
     
+    def get_vector_store(self):
+        """Get the vector store instance"""
+        return self.vector_store
+    
     def reset_vector_store(self) -> bool:
         """Reset vector store (delete all data)"""
         try:
