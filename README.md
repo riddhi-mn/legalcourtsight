@@ -5,10 +5,12 @@ Legal advice chatbot that leverages RAG pipeline with hybrid retrieval and knowl
 
 <h3>Langchain package requirements</h3>
 <p>
-langchain                                0.3.27
-langchain-community                      0.3.29
-langchain-core                           0.3.75
-langchain-openai                         0.3.32
-langchain-text-splitters                 0.3.9
-langsmith                                0.4.20
+<ul>
+<li>langchain                                0.3.27</li>
+<li>langchain-community                      0.3.29</li>
+<li>langchain-core                           0.3.75</li>
+<li>langchain-openai                         0.3.32</li>
+<li>langchain-text-splitters                 0.3.9</li>
+<li>langsmith                                0.4.20</li>
+</ul>
 </p>
