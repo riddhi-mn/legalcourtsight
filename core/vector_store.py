@@ -18,12 +18,16 @@ class VectorStoreManager:
     def __init__(self, persist_directory: str, openai_api_key: str):
         self.persist_directory = persist_directory
 
-        custom_client = httpx.Client(trust_env=False)
+        #custom_client = httpx.Client(trust_env=False)
+
+        os.environ["OPENAI_PROXY"] = ""
+        os.environ["HTTP_PROXY"] = ""
+        os.environ["HTTPS_PROXY"] = ""
 
         self.embeddings = OpenAIEmbeddings(
             #openai_api_key=openai_api_key,
             model="text-embedding-ada-002",
-            http_client=custom_client
+            #http_client=custom_client
         )
         self.vector_store: Optional[Chroma] = None
         self.collection_name = "legal_documents"
