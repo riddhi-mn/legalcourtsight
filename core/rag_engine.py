@@ -8,6 +8,7 @@ from langchain.schema import Document
 from langchain.prompts import PromptTemplate
 import re
 import logging
+import httpx
 
 from .vector_store import VectorStoreManager
 from .document_processor import DocumentProcessor
@@ -27,12 +28,15 @@ class RAGEngine:
 
         self.openai_api_key = openai_api_key
         self.vector_store_manager = vector_store_manager
+
+        custom_client = httpx.Client(trust_env=False)
         
         # Initialize OpenAI chat model
         self.llm = ChatOpenAI(
             #openai_api_key=self.openai_api_key,
             model="gpt-4o",
-            temperature=0.1  # It will auto-detect OPENAI_API_KEY from env
+            temperature=0.1,  # It will auto-detect OPENAI_API_KEY from env
+            http_client=custom_client
         )
 
         # Conversation memory

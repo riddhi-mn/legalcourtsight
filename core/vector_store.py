@@ -6,6 +6,8 @@ from langchain.schema import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 import logging
+import httpx
+import openai   
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,9 +17,13 @@ class VectorStoreManager:
     
     def __init__(self, persist_directory: str, openai_api_key: str):
         self.persist_directory = persist_directory
+
+        custom_client = httpx.Client(trust_env=False)
+
         self.embeddings = OpenAIEmbeddings(
             #openai_api_key=openai_api_key,
-            model="text-embedding-ada-002"
+            model="text-embedding-ada-002",
+            http_client=custom_client
         )
         self.vector_store: Optional[Chroma] = None
         self.collection_name = "legal_documents"

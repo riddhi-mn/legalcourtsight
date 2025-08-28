@@ -30,14 +30,14 @@ def ask_question():
             }), 400
         
         # Get or create session
-        session_manager = current_app.session_manager
+        session_manager = current_app.session_manager # type: ignore
         if not session_id:
             session_id = session_manager.create_session()
         elif not session_manager.get_session(session_id):
             session_id = session_manager.create_session()
         
         # Process query with RAG engine
-        rag_engine = current_app.rag_engine
+        rag_engine = current_app.rag_engine # type: ignore
         response = rag_engine.process_query(question, session_id)
         
         # Update session
@@ -60,7 +60,7 @@ def ask_question():
 def get_system_status():
     """Get comprehensive system health and initialization status"""
     try:
-        rag_engine = current_app.rag_engine
+        rag_engine = current_app.rag_engine # type: ignore
         system_status = rag_engine.get_system_status()
         
         # Add additional system info
@@ -129,7 +129,7 @@ def get_example_queries():
 def get_session_info(session_id: str):
     """Get detailed session information"""
     try:
-        session_manager = current_app.session_manager
+        session_manager = current_app.session_manager # type: ignore
         session = session_manager.get_session(session_id)
         
         if not session:
@@ -185,12 +185,12 @@ def reset_session():
         session_id = data.get('session_id')
         
         if session_id:
-            session_manager = current_app.session_manager
+            session_manager = current_app.session_manager # type: ignore
             if session_id in session_manager.sessions:
                 del session_manager.sessions[session_id]
         
         # Create new session
-        new_session_id = current_app.session_manager.create_session()
+        new_session_id = current_app.session_manager.create_session() # type: ignore
         
         return jsonify({
             "success": True,
@@ -209,7 +209,7 @@ def reset_session():
 def get_document_stats():
     """Get document processing and vector store statistics"""
     try:
-        rag_engine = current_app.rag_engine
+        rag_engine = current_app.rag_engine # type: ignore
         vector_stats = rag_engine.vector_store_manager.get_vector_store_stats()
         
         return jsonify({
