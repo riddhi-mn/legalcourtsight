@@ -36,6 +36,8 @@ def create_app():
         if not config_status["config"]["openai_configured"]:
             raise ValueError("OpenAI API key is required. Please set OPENAI_API_KEY environment variable.")
     
+    assert Config.OPENAI_API_KEY is not None, "OPENAI_API_KEY must be set in the environment."
+    
     # Create Flask app
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -87,17 +89,18 @@ def create_app():
     session_manager = SessionManager()
     
     # Attach components to app 
+    
+    app.document_processor = document_processor  # type: ignore
+    app.vector_store_manager = vector_store_manager  # type: ignore
+    app.rag_engine = rag_engine  # type: ignore
+    app.session_manager = session_manager  # type: ignore
+    
     '''
-    app.document_processor = document_processor
-    app.vector_store_manager = vector_store_manager
-    app.rag_engine = rag_engine
-    app.session_manager = session_manager
-    '''
-
     app.config['document_processor'] = document_processor
     app.config['vector_store_manager'] = vector_store_manager
     app.config['rag_engine'] = rag_engine
     app.config['session_manager'] = session_manager
+    '''
     
     # Register blueprints
     app.register_blueprint(api_bp)

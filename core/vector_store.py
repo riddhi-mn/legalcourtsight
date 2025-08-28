@@ -16,7 +16,7 @@ class VectorStoreManager:
     def __init__(self, persist_directory: str, openai_api_key: str):
         self.persist_directory = persist_directory
         self.embeddings = OpenAIEmbeddings(
-            openai_api_key=openai_api_key,
+            #openai_api_key=openai_api_key,
             model="text-embedding-ada-002"
         )
         self.vector_store: Optional[Chroma] = None
@@ -25,7 +25,7 @@ class VectorStoreManager:
         # Ensure directory exists
         os.makedirs(persist_directory, exist_ok=True)
     
-    def initialize_vector_store(self, documents: List[Document] = None) -> bool:
+    def initialize_vector_store(self, documents: Optional[List[Document]] = None) -> bool:
         """Initialize vector store with optional documents"""
         try:
             # ChromaDB client settings

@@ -31,7 +31,7 @@ class RAGEngine:
         # Initialize OpenAI chat model
         self.llm = ChatOpenAI(
             #openai_api_key=self.openai_api_key,
-            model=model_name,
+            model="gpt-4o",
             temperature=0.1  # It will auto-detect OPENAI_API_KEY from env
         )
 
@@ -79,10 +79,16 @@ Answer:"""
             logger.warning("Vector store not initialized, QA chain unavailable")
             return
         
+        vector_store = self.vector_store_manager.get_vector_store()
+
+        if vector_store is None:
+            logger.error("Vector store is None, cannot initialize QA chain.")
+            return
+        
         try:
             self.qa_chain = ConversationalRetrievalChain.from_llm(
                 llm=self.llm,
-                retriever=self.vector_store_manager.get_vector_store().as_retriever( search_kwargs={"k": 5} ),
+                retriever=vector_store.as_retriever(search_kwargs={"k": 5}),
                 memory=self.memory,
                 return_source_documents=True,
                 #verbose=True
