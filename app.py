@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, app, config, render_template, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 import logging
@@ -55,13 +55,13 @@ def create_app():
     # Vector store manager
     vector_store_manager = VectorStoreManager(
         persist_directory=Config.VECTOR_DB_PATH,
-        openai_api_key=Config.OPENAI_API_KEY
+        openai_api_key=Config.OPENAI_API_KEY 
     )
-    
+
     # Load and process documents
     logger.info("Loading and processing documents...")
     documents = document_processor.load_documents(Config.DOCUMENTS_PATH)
-    
+
     if documents:
         logger.info(f"Loaded {len(documents)} document pages")
         chunks = document_processor.chunk_documents(documents)
@@ -79,17 +79,25 @@ def create_app():
     # RAG engine
     rag_engine = RAGEngine(
         openai_api_key=Config.OPENAI_API_KEY,
-        vector_store_manager=vector_store_manager
-    )
+        vector_store_manager=vector_store_manager,
+        model_name=Config.OPENAI_MODEL
+        ) # type: ignore
     
     # Session manager
     session_manager = SessionManager()
     
-    # Attach components to app
+    # Attach components to app 
+    '''
     app.document_processor = document_processor
     app.vector_store_manager = vector_store_manager
     app.rag_engine = rag_engine
     app.session_manager = session_manager
+    '''
+
+    app.config['document_processor'] = document_processor
+    app.config['vector_store_manager'] = vector_store_manager
+    app.config['rag_engine'] = rag_engine
+    app.config['session_manager'] = session_manager
     
     # Register blueprints
     app.register_blueprint(api_bp)
@@ -120,13 +128,14 @@ def create_app():
     @app.route('/health')
     def health():
         """Basic health check"""
+        from datetime import datetime
         return jsonify({
             "status": "healthy",
             "service": "Legal Consultation RAG System",
             "version": "1.0.0",
-            "timestamp": "2025-08-26T14:45:32Z",
+            "timestamp": datetime.utcnow().isoformat() + 'Z',  # Dynamic timestamp
             "developer": "cicada007o"
-        })
+    })
     
     # Cleanup expired sessions periodically
     @app.before_request

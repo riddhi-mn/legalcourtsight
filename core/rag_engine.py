@@ -12,8 +12,8 @@ import logging
 from .vector_store import VectorStoreManager
 from .document_processor import DocumentProcessor
 
-load_dotenv()
-openai_api_key = os.getenv('OPENAI_API_KEY')
+#load_dotenv()
+#openai_api_key = os.getenv('OPENAI_API_KEY')
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class RAGEngine:
     """Advanced RAG engine for legal document consultation"""
     
-    def __init__(self, openai_api_key: str, vector_store_manager: VectorStoreManager):
+    def __init__(self, openai_api_key: str, vector_store_manager: VectorStoreManager, model_name: str = "gpt-3.5-turbo"):
         #load_dotenv()
     #openai_api_key = os.getenv('OPENAI_API_KEY')
 
@@ -30,10 +30,11 @@ class RAGEngine:
         
         # Initialize OpenAI chat model
         self.llm = ChatOpenAI(
-    model="gpt-3.5-turbo",
-    temperature=0.1  # It will auto-detect OPENAI_API_KEY from env
-)
-        
+            #openai_api_key=self.openai_api_key,
+            model=model_name,
+            temperature=0.1  # It will auto-detect OPENAI_API_KEY from env
+        )
+
         # Conversation memory
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",
@@ -84,7 +85,7 @@ Answer:"""
                 retriever=self.vector_store_manager.get_vector_store().as_retriever( search_kwargs={"k": 5} ),
                 memory=self.memory,
                 return_source_documents=True,
-                verbose=True
+                #verbose=True
             )
             logger.info("QA chain initialized successfully")
         except Exception as e:
