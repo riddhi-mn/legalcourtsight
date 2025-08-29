@@ -1,7 +1,7 @@
 services:
   - type: web
-    name: legal-consultation-rag
-    env: python
+    name: courtsightAI
+    runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python app.py
@@ -9,7 +9,5 @@ services:
       - key: FLASK_ENV
         value: production
       - key: FLASK_DEBUG
-        value: false
-      - key: PYTHON_VERSION
-        value: 3.10.0
+        value: "false"
     healthCheckPath: /health
