@@ -3,9 +3,11 @@ flask==3.0.3
 python-dotenv==1.0.1
 
 # AI/ML Stack - Fixed compatibility issues
-langchain==0.2.16
-langchain-openai==0.1.23
-langchain-community==0.2.16
+langchain==0.3.27
+langchain-openai==0.3.32
+langchain-community==0.3.29
+langchain-text-splitters==0.3.9
+langsmith==0.4.20
 openai==1.51.0
 chromadb==0.5.5
 sentence-transformers==3.0.1
